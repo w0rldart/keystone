@@ -68,10 +68,12 @@ module.exports = Field.create({
 	hasExisting () {
 		return this.props.value && !!this.props.value.filename;
 	},
-	getFilename () {
+	getFilename (href) {
 		return this.state.userSelectedFile
 			? this.state.userSelectedFile.name
-			: this.props.value.filename;
+			: href
+				? <a href={this.props.value.url} target="_blank">{this.props.value.filename}</a>
+				: this.props.value.filename;
 	},
 
 	// ==============================
@@ -126,8 +128,8 @@ module.exports = Field.create({
 		return (
 			<div>
 				{(this.hasFile() && !this.state.removeExisting) ? (
-					<FileChangeMessage component={href ? 'a' : 'span'} href={href} target="_blank">
-						{this.getFilename()}
+					<FileChangeMessage href={href} target="_blank">
+						{this.getFilename(href)}
 					</FileChangeMessage>
 				) : null}
 				{this.renderChangeMessage()}
